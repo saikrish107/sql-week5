@@ -1,3 +1,4 @@
+question 1:
 SQL> select initcap(dname) from dept;
 
 INITCAP(DNAME)
@@ -11,6 +12,7 @@ Cse
 
 6 rows selected.
 
+question 2:
 SQL> select concat(concat(concat(ename,'['),concat(job,']')),concat('RS.',sal)) as lensal from emp;
 
 LENSAL
@@ -35,6 +37,7 @@ MILLER[CLERK]RS.1300
 
 14 rows selected.
 
+question 3:
 SQL> select dname,length(dname)-length(replace(lower(dname),'s','')) len from dept;
 
 DNAME                 LEN
@@ -48,6 +51,7 @@ cse                     1
 
 6 rows selected.
 
+question 4:
 SQL> select deptno from dept
   2  MINUS
   3  select distinct(deptno) from emp;
@@ -57,6 +61,8 @@ SQL> select deptno from dept
         40
         50
         60
+        
+ question 5:
  1* select * from emp where EXTRACT(year from hiredate)<1990 and EXTRACT(year from hiredate)>1980 and EXTRACT(day from hiredate)>14 order by hiredate
 QL> /
 
@@ -84,14 +90,14 @@ QL> /
      7934 MILLER     CLERK           7782 23-JAN-82       1300
        10
 
-
-  1  SELECT TO_CHAR (Sysdate, 'Day ddth Month YYYY HH:MI:SS AM') AS System_date_time
-  2* FROM Dual
-SQL> /
+question 6:
+SQL> select to_char(sysdate,'day ddth month YYYY HH:MI:SS AM') as system_date_time
+  2  from dual;
 
 SYSTEM_DATE_TIME
 -----------------------------------------
-Tuesday   12th July      2022 02:47:47 PM
+wednesday 03rd august    2022 10:20:01 AM
+question 7:
   1* select ename from emp,dual where to_char(hiredate,'dd')>15 and to_char(hiredate,'Day')='Wednesday' and (sysdate-hiredate)/30>20
 SQL> /
 
@@ -99,6 +105,7 @@ ENAME
 ----------
 SMITH
 
+question 8:
   1* select ename,round((sysdate-hiredate)/365) from emp,dual
 SQL> /
 
@@ -124,21 +131,41 @@ MILLER                                41
 
 14 rows selected.
 
+question 10:
 
-question 18.
+SQL> select ename,empno,dname,grade from emp e,dept d,salgrade s where e.deptno=d.deptno and e.sal b
+etween losal and hisal;
 
-  1* select to_char(to_date('&date','dd.mm.yy'),'Day') from dual
-SQL> /
-Enter value for date: 05.05.2003
-old   1: select to_char(to_date('&date','dd.mm.yy'),'Day') from dual
-new   1: select to_char(to_date('05.05.2003','dd.mm.yy'),'Day') from dual
+ENAME           EMPNO DNAME               GRADE
+---------- ---------- -------------- ----------
+MILLER           7934 ACCOUNTING              2
+CLARK            7782 ACCOUNTING              4
+KING             7839 ACCOUNTING              5
+SMITH            7369 RESEARCH                1
+FORD             7902 RESEARCH                4
+JONES            7566 RESEARCH                4
+ADAMS            7876 RESEARCH                1
+SCOTT            7788 RESEARCH                5
+JAMES            7900 SALES                   1
+TURNER           7844 SALES                   3
+BLAKE            7698 SALES                   4
+ALLEN            7499 SALES                   3
+MARTIN           7654 SALES                   2
+WARD             7521 SALES                   2
 
-TO_CHAR(T
----------
-Monday
-        
-   question 12:
-        
+14 rows selected.
+
+question 11:
+
+SQL> select to_char(sysdate,'hh:mi:ss ddth month YY')
+  2  from dual;
+
+TO_CHAR(SYSDATE,'HH:MI:SSD
+--------------------------
+10:02:05 03rd august    22
+
+question 12:
+
 sql>select e1.ename from emp e1,dept d1 where e1.deptno=d1.deptno and e1.sal>(select avg(e2.sal) from emp e2,dept d2 where e2.deptno=d2.deptno and d1.dname=d2.dname)
         ENAME
 ----------
@@ -149,11 +176,36 @@ FORD
 BLAKE
 ALLEN
 
-question 16:        
+question 13:
+SQL>  select e1.ename,count(e2.ename) num_of_subord
+  2   from emp e1,emp e2
+  3   where e1.empno=e2.mgr and e1.job=upper('manager')
+  4    group by e1.ename;
+
+ENAME      NUM_OF_SUBORD
+---------- -------------
+BLAKE                  5
+CLARK                  1
+JONES                  2
+
+question 16:
+
 sql>select e1.ename from emp e1
-where e1.hiredate<(select e2.hiredate from emp e2 where lower(e2.job)='manager' and e1.deptno=e2.deptno)        
+where e1.hiredate<(select e2.hiredate from emp e2 where lower(e2.job)='manager' and e1.deptno=e2.deptno);        
     ENAME
 ----------
 ALLEN
 WARD
 SMITH
+
+question 18:
+
+select to_char(to_date('&date','dd.mm.yy'),'Day') from dual
+SQL> /
+Enter value for date: 05.05.2003
+old   1: select to_char(to_date('&date','dd.mm.yy'),'Day') from dual
+new   1: select to_char(to_date('05.05.2003','dd.mm.yy'),'Day') from dual
+
+TO_CHAR(T
+---------
+Monday
